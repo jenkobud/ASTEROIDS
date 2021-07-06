@@ -19,7 +19,7 @@ public class Screen extends PApplet{
 	
 	public void settings()
 	{
-		size(1024, 768);
+		size(1200, 800);
 		
 	}
 
@@ -244,4 +244,4 @@ public class Screen extends PApplet{
 		PApplet.main(new String[] { "Game.Screen" });
 	}
 
-}a
+}
