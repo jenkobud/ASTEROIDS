@@ -72,7 +72,7 @@ public class EnemyLvL2 extends Enemy implements Dibujable, Movible, Disparador{
 
 	}
 
-	public void Movimiento(int opc, PApplet screen) {
+	public void movimiento(int opc, PApplet screen) {
 		this.setX(this.getX()+Xspeed);//se mueve en base a Xspeed y Yspeed
 		this.setY(this.getY()+Yspeed);
 		if(this.getX()+this.lado+10>=screen.width){//Si choca contra la pared invierte su sentido

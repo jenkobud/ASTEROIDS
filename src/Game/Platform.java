@@ -10,30 +10,30 @@ import Ships.Ship;
 import Things.*;
 
 public class Platform {
-	private String Name;
-	private int Puntaje;
-	private Ship Nave = new Ship(512, 272, 50);
+	private String name;
+	private int puntaje;
+	private Ship nave = new Ship(512, 272, 50);
 	private Vector<SmallAsteroid> asteroidesChicos;
 	private Vector<BigAsteroid> asteroidesGrandes;
 	private Vector<Enemy> enemigos;
 	private Vector<Item> items;
 	private Mapa level;
-	private int KillEnemy,KillAsteroid,Lifes;
+	private int killEnemy, killAsteroid, lifes;
 	private PImage lifeI;
 	
 	protected Platform(String name,int Lvl,PApplet screen) {//Construtor de plataforma.
 		super();
-		Name = name;
+		this.name = name;
 		level = new Mapa(Lvl);
-		KillEnemy=2;
-		KillAsteroid=1;
+		killEnemy = 2;
+		killAsteroid = 1;
 		asteroidesChicos = new Vector<SmallAsteroid>();
 		asteroidesGrandes = new Vector<BigAsteroid>();
 		enemigos = new Vector<Enemy>();
 		items = new Vector<Item>();
-		Nave.setImg(screen.loadImage("ship.png"));
+		nave.setImg(screen.loadImage("ship.png"));
 		lifeI = screen.loadImage("ship.png");
-		for(int i=0; i<level.getCantDeAsteroidesChicos();i++){//creamos todos los asteroides chicos según el nivel que se encuentre
+		for(int i=0; i<level.getCantDeAsteroidesChicos();i++){//creamos todos los asteroides chicos segï¿½n el nivel que se encuentre
 			float xspeed = screen.random(-4,4);
 			float yspeed = screen.random(-4,4);
 			int radio = (int)screen.random(20,35);
@@ -43,7 +43,7 @@ public class Platform {
 			asteroidesChicos.elementAt(i).setImg(screen.loadImage("ast.png"));
 		}
 		
-		for(int i=0; i<level.getCantDeAsteroidesGrandes();i++){//creamos todos los asteroides grandes según el nivel que se encuentre
+		for(int i=0; i<level.getCantDeAsteroidesGrandes();i++){//creamos todos los asteroides grandes segï¿½n el nivel que se encuentre
 			float xspeed = screen.random(-4,4);
 			float yspeed = screen.random(-4,4);
 			int radio = (int)screen.random(36,46);
@@ -52,7 +52,7 @@ public class Platform {
 			asteroidesGrandes.add(new BigAsteroid(X, Y, radio, xspeed, yspeed));
 			asteroidesGrandes.elementAt(i).setImg(screen.loadImage("ast2.png"));
 		}
-		for(int i=0; i<level.getCantDeEnemigos();i++){//creamos todos los enemigos según el nivel que se encuentre
+		for(int i=0; i<level.getCantDeEnemigos();i++){//creamos todos los enemigos segï¿½n el nivel que se encuentre
 			int type = (int) screen.random(1,3);
 			float x = 1;
 			float y = screen.random(1,screen.height-100);
@@ -75,22 +75,22 @@ public class Platform {
 		}
 	} 
 	
-	public boolean WinLose(PApplet screen){//Si pierde o gana 
-		if(Nave.getLife()<=0){//si la vida de la nave llega a 0
+	public boolean winLose(PApplet screen){//Si pierde o gana
+		if(nave.getLife()<=0){//si la vida de la nave llega a 0
 			screen.fill(255,0,0);
 			screen.text("YOU LOST", (screen.width/2),(screen.height/2) );
-			screen.text(Puntaje, (screen.width/2), (screen.height/2)+10);
+			screen.text(puntaje, (screen.width/2), (screen.height/2)+10);
 			screen.exit();
 		}else if(asteroidesChicos.isEmpty() && asteroidesGrandes.isEmpty() && enemigos.isEmpty()){//Si logramos eliminar a todos los enemigos
 			screen.fill(0,255,0);
 			screen.text("YOU WON", (screen.width/2),(screen.height/2) );
-			screen.text(Puntaje, (screen.width/2), (screen.height/2)+10);
-			if(level.getLvL()<3){//Si quedan más niveles por delante
+			screen.text(puntaje, (screen.width/2), (screen.height/2)+10);
+			if(level.getLvL()<3){//Si quedan mï¿½s niveles por delante
 			return true;
-			}else{	//En el caso de que no hayan más niveles
+			}else{	//En el caso de que no hayan mï¿½s niveles
 			screen.fill(0,255,0);
 			screen.text("THE END", (screen.width/3),(screen.height/2) );
-			screen.text(Puntaje, (screen.width/2), (screen.height/2)+10);
+			screen.text(puntaje, (screen.width/2), (screen.height/2)+10);
 			}
 		}
 		return false;
@@ -102,15 +102,15 @@ public class Platform {
 		BigAsteroid Auxi = null;
 		Laser Laux =null;
 		Item Iaux = null;
-		Lifes=Nave.getLife();
+		lifes = nave.getLife();
 		screen.fill(255,255,255);
-		String Score = "SCORE: "+Puntaje;
+		String Score = "SCORE: "+ puntaje;
 		String life = "LIFES: ";
 		screen.textSize(12);
 		screen.text(Score, 10, 10);
 		screen.text(life, 15, 30);
 		float xl=50,yl=20;
-		for(int i=0;i<Lifes;i++){
+		for(int i = 0; i< lifes; i++){
 			if(xl+10>screen.width){
 				xl=50;
 				yl+=16;
@@ -119,80 +119,80 @@ public class Platform {
 			xl+=12;
 		}
 		for(BigAsteroid Act : asteroidesGrandes){//Comprabacion de asteroides Grandes
-			if(verificarColision(Act, Nave.getXcentro()-Nave.getAlto()/2, Nave.getYcentro()-(Nave.getAlto()/2)) || verificarColision(Act, Nave.getXcentro()+Nave.getAlto()/2, Nave.getYcentro()+Nave.getAlto()/2)|| verificarColision(Act, Nave.getXcentro()+Nave.getAlto()/2, Nave.getYcentro()-Nave.getAlto()/2)|| verificarColision(Act, Nave.getXcentro()-Nave.getAlto()/2, Nave.getYcentro()+Nave.getAlto()/2)){
+			if(verificarColision(Act, nave.getXcentro()- nave.getAlto()/2, nave.getYcentro()-(nave.getAlto()/2)) || verificarColision(Act, nave.getXcentro()+ nave.getAlto()/2, nave.getYcentro()+ nave.getAlto()/2)|| verificarColision(Act, nave.getXcentro()+ nave.getAlto()/2, nave.getYcentro()- nave.getAlto()/2)|| verificarColision(Act, nave.getXcentro()- nave.getAlto()/2, nave.getYcentro()+ nave.getAlto()/2)){
 				screen.fill(255,0,0);
-				Nave.setLife(Nave.getLife()-1);
-				Auxi = Act;//En el caso de que nuestra nave tenga mas de uno de vida eliminamos el objeto que choco para evitar que este siga colisionandola y quitandole más vida.
+				nave.setLife(nave.getLife()-1);
+				Auxi = Act;//En el caso de que nuestra nave tenga mas de uno de vida eliminamos el objeto que choco para evitar que este siga colisionandola y quitandole mï¿½s vida.
 				Auxi.destruir(this,screen);
-				Puntaje=0;
+				puntaje =0;
 				}
-			for(Laser Bact : Nave.getBalas()){//Si la nave le acierta a un ASTEROIDE GRANDE.
+			for(Laser Bact : nave.getBalas()){//Si la nave le acierta a un ASTEROIDE GRANDE.
 				if(verificarColision(Act, Bact.getX(), Bact.getY()) || (verificarColision(Act, Bact.getX()+5, Bact.getY()+5))){
 					Auxi = Act;
 					Auxi.destruir(this,screen);
 					Laux = Bact;
-					Puntaje += KillAsteroid;
+					puntaje += killAsteroid;
 				}
 			}
 		}
-		Nave.getBalas().remove(Laux);
+		nave.getBalas().remove(Laux);
 		asteroidesGrandes.remove(Auxi);
 		SmallAsteroid Aux = null;
 		for(SmallAsteroid Act : asteroidesChicos){//Comprabacion de asterroides chicos
-			if(verificarColision(Act, Nave.getXcentro()-Nave.getAlto()/2, Nave.getYcentro()-(Nave.getAlto()/2)) || verificarColision(Act, Nave.getXcentro()+Nave.getAlto()/2, Nave.getYcentro()+Nave.getAlto()/2)|| verificarColision(Act, Nave.getXcentro()+Nave.getAlto()/2, Nave.getYcentro()-Nave.getAlto()/2)|| verificarColision(Act, Nave.getXcentro()-Nave.getAlto()/2, Nave.getYcentro()+Nave.getAlto()/2)){
-				Nave.setLife(Nave.getLife()-1);
+			if(verificarColision(Act, nave.getXcentro()- nave.getAlto()/2, nave.getYcentro()-(nave.getAlto()/2)) || verificarColision(Act, nave.getXcentro()+ nave.getAlto()/2, nave.getYcentro()+ nave.getAlto()/2)|| verificarColision(Act, nave.getXcentro()+ nave.getAlto()/2, nave.getYcentro()- nave.getAlto()/2)|| verificarColision(Act, nave.getXcentro()- nave.getAlto()/2, nave.getYcentro()+ nave.getAlto()/2)){
+				nave.setLife(nave.getLife()-1);
 				Aux=Act;
-				Puntaje=0;
+				puntaje =0;
 			}
-			for(Laser Bact : Nave.getBalas()){//Si la nave le acierta a un ASTEROIDE CHICO.
+			for(Laser Bact : nave.getBalas()){//Si la nave le acierta a un ASTEROIDE CHICO.
 				if(verificarColision(Act, Bact.getX(), Bact.getY()) || (verificarColision(Act, Bact.getX()+5, Bact.getY()+5))){
 					Aux = Act;
 					Laux = Bact;
-					Puntaje+= KillAsteroid;
+					puntaje += killAsteroid;
 				}
 			}
 		}
-		Nave.getBalas().remove(Laux);
+		nave.getBalas().remove(Laux);
 		asteroidesChicos.remove(Aux);
 		Laser EnLaux = null;
 		Enemy Eaux =null;
 		for(Enemy Act : enemigos){//Colision enemigos
-			if(verificarColision(Act, Nave.getXcentro()-Nave.getAlto()/2, Nave.getYcentro()-(Nave.getAlto()/2)) || verificarColision(Act, Nave.getXcentro()+Nave.getAlto()/2, Nave.getYcentro()+Nave.getAlto()/2)|| verificarColision(Act, Nave.getXcentro()+Nave.getAlto()/2, Nave.getYcentro()-Nave.getAlto()/2)|| verificarColision(Act, Nave.getXcentro()-Nave.getAlto()/2, Nave.getYcentro()+Nave.getAlto()/2)){
-				Nave.setLife(Nave.getLife()-1);
+			if(verificarColision(Act, nave.getXcentro()- nave.getAlto()/2, nave.getYcentro()-(nave.getAlto()/2)) || verificarColision(Act, nave.getXcentro()+ nave.getAlto()/2, nave.getYcentro()+ nave.getAlto()/2)|| verificarColision(Act, nave.getXcentro()+ nave.getAlto()/2, nave.getYcentro()- nave.getAlto()/2)|| verificarColision(Act, nave.getXcentro()- nave.getAlto()/2, nave.getYcentro()+ nave.getAlto()/2)){
+				nave.setLife(nave.getLife()-1);
 				Eaux=Act;
-				Puntaje=0;
+				puntaje =0;
 			}
-			for(Laser Bact : Nave.getBalas()){//Si la nave le acierta a un enemigo
+			for(Laser Bact : nave.getBalas()){//Si la nave le acierta a un enemigo
 				if(verificarColision(Act, Bact.getX(), Bact.getY()) || (verificarColision(Act, Bact.getX()+5, Bact.getY()+5))){
 					Eaux = Act;
 					Laux = Bact;
-					Puntaje+=KillEnemy;
+					puntaje += killEnemy;
 				}
 			}
 			for(Laser Bact : Act.getBalas()){//Si las balas de enemigo da a nave
-				if(verificarColision(Nave, Bact.getX(), Bact.getY()) || (verificarColision(Nave, Bact.getX()+5, Bact.getY()+5))){
-					Nave.setLife(Nave.getLife()-1);
+				if(verificarColision(nave, Bact.getX(), Bact.getY()) || (verificarColision(nave, Bact.getX()+5, Bact.getY()+5))){
+					nave.setLife(nave.getLife()-1);
 					EnLaux=Bact;
-					Puntaje=0;
+					puntaje =0;
 				}
 			}
 			Act.getBalas().remove(EnLaux);
 		}
-		Nave.getBalas().remove(Laux);
+		nave.getBalas().remove(Laux);
 		enemigos.remove(Eaux);
 		for(Item Iact : items){//Comprobacion de la nave si toca un item
-			if(verificarColision(Nave, Iact.getX(), Iact.getY()) || (verificarColision(Nave, Iact.getX()+Iact.getLado(), Iact.getY()+Iact.getLado()))){
+			if(verificarColision(nave, Iact.getX(), Iact.getY()) || (verificarColision(nave, Iact.getX()+Iact.getLado(), Iact.getY()+Iact.getLado()))){
 				Iaux = Iact;
 				if(Iaux.isAccion()){
-					KillEnemy= KillEnemy*Iact.getBonus();
-					KillAsteroid = KillAsteroid*Iact.getBonus();
+					killEnemy = killEnemy *Iact.getBonus();
+					killAsteroid = killAsteroid *Iact.getBonus();
 				}else if(!Iaux.isAccion()){
-					Nave.setLife(Nave.getLife()+1);
+					nave.setLife(nave.getLife()+1);
 				}
 			}
 		}
 		items.remove(Iaux);
-		WinLose(screen);
+		winLose(screen);
 	}
 	public void mostradorDeItems(int cantAMostrar, PApplet screen){// muestra los items que ya aparecieron
 		for(int i=0;i<items.size() && i< cantAMostrar;i++){
@@ -217,8 +217,8 @@ public class Platform {
 		return false;
 	}
 	private boolean verificarColision(Ship ship, float X, float Y){//Verifica choque de enemigo contra nave y de item contra nave.
-		if(X<=ship.getXcentro()+Nave.getAlto()/2 && X>=ship.getXcentro()-Nave.getAlto()/2){
-			if(Y<=ship.getYcentro()+(Nave.getAlto()/2) && Y>=ship.getYcentro()-(Nave.getAlto()/2)){
+		if(X<=ship.getXcentro()+ nave.getAlto()/2 && X>=ship.getXcentro()- nave.getAlto()/2){
+			if(Y<=ship.getYcentro()+(nave.getAlto()/2) && Y>=ship.getYcentro()-(nave.getAlto()/2)){
 				return true;
 			}
 		}
@@ -226,11 +226,11 @@ public class Platform {
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
 
 	public Vector<SmallAsteroid> getAsteroidesChicos() {
@@ -250,11 +250,11 @@ public class Platform {
 	}
 
 	public Ship getNave() {
-		return Nave;
+		return nave;
 	}
 
 	public void setNave(Ship nave) {
-		Nave = nave;
+		this.nave = nave;
 	}
 
 	public Vector<Enemy> getEnemigos() {
@@ -283,28 +283,28 @@ public class Platform {
 
 
 	public int getPuntaje() {
-		return Puntaje;
+		return puntaje;
 	}
 
 
 	public void setPuntaje(int puntaje) {
-		Puntaje = puntaje;
+		this.puntaje = puntaje;
 	}
 
 	public int getKillEnemy() {
-		return KillEnemy;
+		return killEnemy;
 	}
 
 	public void setKillEnemy(int killEnemy) {
-		KillEnemy = killEnemy;
+		this.killEnemy = killEnemy;
 	}
 
 	public int getKillAsteroid() {
-		return KillAsteroid;
+		return killAsteroid;
 	}
 
 	public void setKillAsteroid(int killAsteroid) {
-		KillAsteroid = killAsteroid;
+		this.killAsteroid = killAsteroid;
 	}
 
 }

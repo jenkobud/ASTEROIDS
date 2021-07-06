@@ -17,7 +17,7 @@ public class BigAsteroid extends Asteroid implements Dibujable, Movible {
 
 	}
 	
-	public void destruir(Platform plataforma,PApplet screen){//Cuando este choca contra algo crea 2 más pequeños como si se desfragmentase
+	public void destruir(Platform plataforma,PApplet screen){//Cuando este choca contra algo crea 2 mï¿½s pequeï¿½os como si se desfragmentase
 			SmallAsteroid ast1 = new SmallAsteroid(this.X, this.Y, (this.Radio/2), this.Xspeed*(-2), this.Yspeed*(-2));//Creamos los asteroides chicos
 			SmallAsteroid ast2 = new SmallAsteroid(this.X, this.Y, (this.Radio/2), this.Xspeed*2, this.Yspeed*2);
 			ast1.setImg(screen.loadImage("ast.png"));
@@ -27,7 +27,7 @@ public class BigAsteroid extends Asteroid implements Dibujable, Movible {
 	}
 
 
-	public void Movimiento(int opc, PApplet screen) {//OPC no se utiliza pero no puedo omitirlo debido a que lo utilizo para la nave.
+	public void movimiento(int opc, PApplet screen) {//OPC no se utiliza pero no puedo omitirlo debido a que lo utilizo para la nave.
 		this.X += this.Xspeed;//Movemos el asteroide segun la velocidad otorgada
 		this.Y+=this.Yspeed;
 		if(this.X+this.Radio>=screen.width){//Si este choca contra el costado de la pantalla rebota con la misma direccion pero invirtiendo X

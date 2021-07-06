@@ -18,7 +18,7 @@ public class SmallAsteroid extends Asteroid implements Dibujable,Movible {
 		pantalla.image(img, this.getX(), this.getY(),this.getRadio(),this.getRadio());
 	}
 
-	public void Movimiento(int opc, PApplet screen) {//OPC no se utiliza pero no puedo omitirlo debido a que lo utilizo para la nave.
+	public void movimiento(int opc, PApplet screen) {//OPC no se utiliza pero no puedo omitirlo debido a que lo utilizo para la nave.
 		this.X += this.Xspeed;//Movemos el asteroide segun la velocidad otorgada
 		this.Y+=this.Yspeed;
 		if(this.X+this.Radio>=screen.width){//Si este choca contra el costado de la pantalla rebota con la misma direccion pero invirtiendo X

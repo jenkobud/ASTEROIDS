@@ -17,9 +17,9 @@ public class EnemyLvL1 extends Enemy implements Dibujable, Movible {
 		limBalas = 9;
 	}
 
-	public void Movimiento(int opc, PApplet screen) {
+	public void movimiento(int opc, PApplet screen) {
 			this.setX(this.getX()+Xspeed);//se mueve donde le indique xspeed
-			if(this.getX()+this.lado+10>=screen.width){//si chocan contra la pared invierte su dirección
+			if(this.getX()+this.lado+10>=screen.width){//si chocan contra la pared invierte su direcciï¿½n
 				this.Xspeed = -this.Xspeed;
 			}
 			if(this.getX()<=0){

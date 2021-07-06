@@ -4,5 +4,5 @@ import processing.core.PApplet;
 
 public interface Movible {
 	
-	public void Movimiento(int opc,PApplet screen);//todo aquel que se mueva
+	public void movimiento(int opc, PApplet screen);//todo aquel que se mueva
 }

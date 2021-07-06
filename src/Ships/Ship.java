@@ -10,7 +10,7 @@ import processing.core.PImage;
 
 public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 	protected float X1,Y1,X2,Y2,X3,Y3;
-	protected int Life;
+	protected int life;
 	protected double angle;
 	protected Vector<Laser> balas;
 	private PImage img;
@@ -25,7 +25,7 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 		this.Y2 = Ycentro-(alto/2);
 		this.X2 = Xcentro;
 		this.angle = 0;
-		Life = 3;
+		this.life = 3;
 		this.balas = new Vector<Laser>();//municiones de la nave
 	}
 	
@@ -64,36 +64,51 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 		double vely = Math.sin(angle) * 6;
 		balas.add(new Laser(this,velx,vely)); 
 	}
-	public void Movimiento(int opc, PApplet screen) {
-		if(opc==1){//Si es 1
-			if((Ycentro-(this.alto/2)>=0)){//Si  Y en el punto2 es mayor que 1
-				if(Ycentro+(this.alto/2)<=screen.height){
-					
+	public void movimiento(int opc, PApplet screen) {
+		Boolean yInScreen = (Ycentro-(this.alto/2)>0) && (Ycentro+(this.alto/2)<screen.height);
+		Boolean xInScreen = (Xcentro-(this.alto/2)>0) && (Xcentro+(this.alto/2)<screen.width);
+
+		double velX, velY;
+		switch(opc){
+			case 1:
+				velX = Math.cos(this.angle) * 5;
+				velY = Math.sin(this.angle) * 5;
+				if (xInScreen && yInScreen){
+					Xcentro += velX;
+					Ycentro += velY;
 				}
-	    		if((Xcentro-(this.alto/2)>=0) && (Xcentro+(this.alto/2)<=screen.height)){
-	    			double angle = Math.atan2(this.Y2 - this.getYcentro(), this.X2 - this.getXcentro());
-	    			double velx = Math.cos(angle) * 5;
-	    			double vely = Math.sin(angle) * 5;
-	    			Xcentro += velx;
-	    			Ycentro += vely;
-	    		}
-	    	}
-		}else if(opc==3){//Si es 3
-			angle+=Math.PI/30;
-		}else if(opc==4){//Si es 4
-			angle-=Math.PI/30;
+				//Still some movement-bugs.
+				if (Xcentro-(this.alto/2) == 0 && velX > 0) Xcentro += velX;// Left-side case.
+				if (Xcentro+(this.alto/2) == screen.width && velX < 0) Xcentro += velX; //Right-side case.
+				if (Ycentro-(this.alto/2) == 0 && velY > 0) Ycentro += velY;// Bottom-side case.
+				if (Ycentro+(this.alto/2) == screen.height && velY < 0) Ycentro += velY; //Top-side case.
+				break;
+			case 2:
+				//Adapt case 1 logic for reverse movement.
+				if(xInScreen && yInScreen) {
+					velX = Math.cos(this.angle) * 3;
+					velY = Math.sin(this.angle) * 3;
+					Xcentro -= velX;
+					Ycentro -= velY;
+				}
+				break;
+			case 3:
+				this.angle+=Math.PI/30;
+				break;
+			case 4:
+				this.angle-=Math.PI/30;
+				break;
 		}
-		
 	}
 	
 	public void seguirMouse(PApplet screen){//RotarTriangulo
-		/*float x_mouse = screen.mouseX;//posición X del mouse	
-		float y_mouse = screen.mouseY;//posición Y del mouse.*/
+		/*float x_mouse = screen.mouseX;//posiciï¿½n X del mouse	
+		float y_mouse = screen.mouseY;//posiciï¿½n Y del mouse.*/
 		float x_center = this.Xcentro;//centro X del triangulo
 		float y_center = this.Ycentro;//centro Y del triangulo
 		
 		
-		// Ahora voy a primero hacer que uno de los vértices, "me siga"
+		// Ahora voy a primero hacer que uno de los vï¿½rtices, "me siga"
 		//float alfa = (float) Math.atan2(y_mouse - this.getYcentro(), x_mouse - this.getXcentro());//Se calcula el angulo de la pendiente de la recta que forma el cursor del mouse respecto al centro del triangulo
 		//if key==a
 		/*if(screen.keyCode=='a'){
@@ -101,14 +116,14 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 		if(screen.keyCode=='d'){
 			angle+=Math.PI/180;
 		}*/
-		this.X3 = (int) (x_center - Math.sin(angle-Math.PI*2/3-Math.PI/2) * this.alto /2);//Le sumamos 120º al angulo para averiguar X3 e Y3. 
+		this.X3 = (int) (x_center - Math.sin(angle-Math.PI*2/3-Math.PI/2) * this.alto /2);//Le sumamos 120ï¿½ al angulo para averiguar X3 e Y3. 
 		this.Y3 = (int) (y_center + Math.cos(angle-Math.PI*2/3-Math.PI/2) * this.alto /2);
 
 		// El que apunta al mouse
 		this.X2 = (int) (x_center - Math.sin(angle-Math.PI/2) * this.alto /2);//Utilizando la formula para averiguar la pendiente de una recta conociendo 2 puntos (el mouse y el centro del triangulo), averiguamos su inclinacion correspondiente en X. 
 		this.Y2 = (int) (y_center + Math.cos(angle-Math.PI/2) * this.alto /2);//Utilizando la formula para averiguar la pendiente de una recta conociendo 2 puntos (el mouse y el centro del triangulo), averiguamos su inclinacion correspondiente en Y.
 		
-		this.X1 = (int) (x_center - Math.sin(angle+Math.PI*2/3-Math.PI/2) * this.alto /2); //Le restamos 120º al angulo para averiguar X1 e Y2.
+		this.X1 = (int) (x_center - Math.sin(angle+Math.PI*2/3-Math.PI/2) * this.alto /2); //Le restamos 120ï¿½ al angulo para averiguar X1 e Y2.
 		this.Y1 = (int) (y_center + Math.cos(angle+Math.PI*2/3-Math.PI/2) * this.alto /2);
 	}
 
@@ -150,12 +165,12 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 
 
 	public int getLife() {
-		return Life;
+		return life;
 	}
 
 
 	public void setLife(int life) {
-		Life = life;
+		this.life = life;
 	}
 
 

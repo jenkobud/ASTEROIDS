@@ -13,19 +13,17 @@ import processing.core.PImage;
 public class Screen extends PApplet{
 	PImage Fondo,pausa;//Imagen de Fondo
 	Platform plataforma;
-	boolean[] keys = new boolean[7];//vector de booleans utilizado para mejorar la jugabilidad cuando se presionan las teclas o el mouse
-	//0=W; 1=s; 2=d; 3=a; 4=mouse; 5=G(guardar); 6=C(Cargar)
-	int cont,contDeItems,puntajeAnt,lvl,pause;
+	boolean[] keys = new boolean[8];//vector de booleans utilizado para mejorar la jugabilidad cuando se presionan las teclas o el mouse
+	//0=W; 1=s; 2=d; 3=a; 4=mouse; 5=G(guardar); 6=C(Cargar); 7=SpaceBar(shoot)
+	int cont,contDeItems,puntajeAnt,lvl;
+	Boolean isPaused;
 	
-	public void settings()
-	{
+	public void settings() {
 		size(1200, 800);
-		
 	}
 
-	public void setup()
-	{
-		pause = 0;
+	public void setup() {
+		isPaused = false;
 		pausa = loadImage("pause.png");
 		Fondo = loadImage("FondoDeJuego.jpg");//Cargamos la IMG de fondo
 		background(Fondo);//se la asignamos al fondo
@@ -37,11 +35,10 @@ public class Screen extends PApplet{
 		
 	}
 	
-	public void draw()
-	{
+	public void draw() {
 		noCursor();
 		background(Fondo);
-		if(pause==0){
+		if(!isPaused){
 			keyVerificar();//funcion para mejorar el uso de teclas
 			plataforma.getNave().dibujar(this);//mostramos la nave
 			plataforma.colisiones(this);
@@ -57,18 +54,18 @@ public class Screen extends PApplet{
 			cont++;//contador que cuenta el tiempo para mostrar un  items
 			for(SmallAsteroid Actual : plataforma.getAsteroidesChicos()){//dibuja Asteroides chicos
 				Actual.dibujar(this);
-				Actual.Movimiento(0, this);
+				Actual.movimiento(0, this);
 			}
 			for(BigAsteroid Actual : plataforma.getAsteroidesGrandes()){//dibuja Asteroides grandes
 				Actual.dibujar(this);
-				Actual.Movimiento(0, this);
+				Actual.movimiento(0, this);
 			}
 			for(Enemy Actual : plataforma.getEnemigos()){//dibuja enemigos
 				Actual.dibujar(this);
 				Actual.disparar(Actual.getXspeed(),3);
-				Actual.Movimiento(0, this);
+				Actual.movimiento(0, this);
 			}
-			if(plataforma.WinLose(this)==true){//Si ganamos y quedan m�s niveles 
+			if(plataforma.winLose(this)==true){//Si ganamos y quedan m�s niveles
 				puntajeAnt = plataforma.getPuntaje();//Guardamos el puntaje anterior para pode seguir con el mismo en el proximo lvl
 				plataforma = new Platform(plataforma.getName(),plataforma.getLevel().getLvL()+1 , this);//subimos unon la dificultad dell nivel.a
 				plataforma.setPuntaje(puntajeAnt);//Se lo asignamos par seguir con el juego
@@ -78,7 +75,7 @@ public class Screen extends PApplet{
 				contDeItems=0;
 			}
 		}
-		if(pause==1){
+		if(isPaused){
     		imageMode(CENTER);
 			image(pausa,(float) (this.width/2),this.height/2,pausa.width*2,pausa.height*2);
 			//textSize(200);
@@ -94,81 +91,62 @@ public class Screen extends PApplet{
 		keys[4] = false;//lo dehabilitamos para que por click nada m�s se dispare 1 vez
 	}*/
 	public void keyPressed(){
-	    if (keyCode == 'w'||keyCode == 'W') {//Si tocamos hacia arriba
-	    	keys[0] = true;//Se habilita la key correspondiente para que se mueva hacia donnde corresponda
-	    }
-	    if (keyCode == 32) {//Si tocamos hacia abajo
-	    	keys[1] = true;//Se habilita la key correspondiente para que se mueva haciaa donnde corresponda
-		}
-		if (keyCode == 'd'||keyCode == 'D') {//Si tocamos hacia la derecha
-			keys[2] = true;//Se habilita la key correspondiente para que se mueva hacia donnde corresponda
-	    }
-	    if (keyCode == 'a'||keyCode == 'A') {//Si tocamos hacia la izquierda
-	    	keys[3] = true;//Se habilita la key correspondiente para que se mueva hacia donnde corresponda
-		 } 
-	    if(keyCode== 'g'||keyCode=='G'){//Si guardamos
-	    	keys[5] = true;//Se habilita la key correspondiente para que se mueva hacia donnde corresponda
-	    }
-	    if(keyCode== 'c'||keyCode=='C'){//Si cargamos
-	    	keys[6] = true;//Se habilita la key correspondiente para que se mueva hacia donnde corresponda
-	    }
-	    if(keyCode== 'P'||keyCode== 'p'){
-	    	if(pause==0){
-	    		pause = 1;
-	    	}else{
-	    		pause = 0;
-	
-	    	}
-	    }
+		//Si pausamos el juego.
+		if(keyCode== 'P'|| keyCode== 'p'){ isPaused = !isPaused; }
+		//Si tocamos hacia arriba
+		if (keyCode == 'w'|| keyCode == 'W') { keys[0] = true; }
+		//Si tocamos hacia abajo
+		if (keyCode == 's'|| keyCode == 'S') { keys[1] = true; }
+		//Si tocamos hacia la derecha
+		if (keyCode == 'd'|| keyCode == 'D') { keys[2] = true; }
+		//Si tocamos hacia la izquierda
+		if (keyCode == 'a'|| keyCode == 'A') { keys[3] = true; }
+		//Si guardamos estado del juego.
+		if(keyCode == 'g'|| keyCode=='G'){ keys[5] = true; }
+		//Si cargamos estado del juego.
+		if(keyCode == 'c'|| keyCode=='C'){ keys[6] = true; }
+		//Si disparamos (SpaceBar)
+		if(keyCode == 32){ keys[7] = true; }
 	}
 	public void keyReleased(){
 		//Se deshabilita la key
-	    if (keyCode == 'w'||keyCode == 'W') {
-	    	keys[0] = false;
-	    }
-	    if (keyCode == 32) {
-	    	keys[1] = false;
-		}
-		if (keyCode == 'd'||keyCode == 'D') {
-			keys[2] = false;
-	    }
-	    if (keyCode == 'a'||keyCode == 'A') {
-	    	keys[3] = false;
-		 }
-	    if(keyCode== 'g'||keyCode=='G'){
-	    	keys[5] = false;
-	    }
-	    if(keyCode== 'c'||keyCode=='C'){
-	    	keys[6] = false;
-	    }
+	    if (keyCode == 'w'|| keyCode == 'W') { keys[0] = false; }
+	    if (keyCode == 's'|| keyCode == 'S') { keys[1] = false; }
+		if (keyCode == 'd'|| keyCode == 'D') { keys[2] = false; }
+	    if (keyCode == 'a'|| keyCode == 'A') { keys[3] = false; }
+	    if (keyCode == 'g'|| keyCode == 'G') { keys[5] = false; }
+	    if (keyCode == 'c'|| keyCode == 'C') { keys[6] = false; }
+		if(keyCode == 32) { keys[7] = false; }
 
 	}
 	public void keyVerificar(){//Funcion para reconocimiento de tecla pulsada
-	    if (keys[0]) {
-	    	plataforma.getNave().Movimiento(1, this);//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
+		if (keys[7]) {
+			plataforma.getNave().disparar(0, 0);//Se dispara
+			keys[7] = false;
+		}
+		if (keys[0]) {
+	    	plataforma.getNave().movimiento(1, this);//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
 	    }
-	    if (keys[1]) {
-	    	plataforma.getNave().disparar(0, 0);//Se envia un 2 que seria igual a Abajo y la pantalla para sus parametros(Alto, ancho) 
-			keys[1] = false;
-	   
+		if (keys[1]) {
+			plataforma.getNave().movimiento(2, this);//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
 		}
 		if (keys[2]) {
-	    	plataforma.getNave().Movimiento(3,this);//Se envia un 3 que seria igual a Derecha y la pantalla para sus parametros(Alto, ancho)
+	    	plataforma.getNave().movimiento(3,this);//Se envia un 3 que seria igual a Derecha y la pantalla para sus parametros(Alto, ancho)
 	    }
 	    if (keys[3]) {
-	    	plataforma.getNave().Movimiento(4,this);//Se envia un 4 que seria igual a Izquierda y la pantalla para sus parametros(Alto, ancho)
+	    	plataforma.getNave().movimiento(4,this);//Se envia un 4 que seria igual a Izquierda y la pantalla para sus parametros(Alto, ancho)
 		 } 
 	    if(keys[4]){//Se envian las coordenadas del mouse
 			plataforma.getNave().disparar(mouseX, mouseY);
 	    }
 	    if(keys[5]){//Guardar
-	    	String Nombre;
-		    Nombre = JOptionPane.showInputDialog("INPUT YOUR NAME...");
-		    if(Nombre==null){
+	    	String nombre;
+		    nombre = JOptionPane.showInputDialog("INPUT YOUR NAME...");
+		    if(nombre == null){
 		    	keys[5]=false;
 		    	return;
 		    	}//si tocamos cancelar salddriamos de la funcion
-	    	plataforma.setName(Nombre);
+	    	plataforma.setName(nombre);
 	    	
 	    	try {
 				Data.SavePlatform(plataforma, plataforma.getItems().size()-this.contDeItems, this.contDeItems);
