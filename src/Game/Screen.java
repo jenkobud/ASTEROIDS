@@ -15,6 +15,14 @@ public class Screen extends PApplet{
 	Platform plataforma;
 	boolean[] keys = new boolean[8];//vector de booleans utilizado para mejorar la jugabilidad cuando se presionan las teclas o el mouse
 	//0=W; 1=s; 2=d; 3=a; 4=mouse; 5=G(guardar); 6=C(Cargar); 7=SpaceBar(shoot)
+	Integer ARRIBA = 0; 
+	Integer ABAJO = 1;
+	Integer DERECHA = 2;
+	Integer IZQUIERDA = 3;
+	Integer MOUSE = 4;
+	Integer GUARDAR = 5;
+	Integer CARGAR = 6;
+	Integer SPACEPAR = 7;
 	int cont,contDeItems,puntajeAnt,lvl;
 	Boolean isPaused;
 	
@@ -94,58 +102,55 @@ public class Screen extends PApplet{
 		//Si pausamos el juego.
 		if(keyCode== 'P'|| keyCode== 'p'){ isPaused = !isPaused; }
 		//Si tocamos hacia arriba
-		if (keyCode == 'w'|| keyCode == 'W') { keys[0] = true; }
+		if (keyCode == 'w'|| keyCode == 'W') { keys[ARRIBA] = true; }
 		//Si tocamos hacia abajo
-		if (keyCode == 's'|| keyCode == 'S') { keys[1] = true; }
+		if (keyCode == 's'|| keyCode == 'S') { keys[ABAJO] = true; }
 		//Si tocamos hacia la derecha
-		if (keyCode == 'd'|| keyCode == 'D') { keys[2] = true; }
+		if (keyCode == 'd'|| keyCode == 'D') { keys[DERECHA] = true; }
 		//Si tocamos hacia la izquierda
-		if (keyCode == 'a'|| keyCode == 'A') { keys[3] = true; }
+		if (keyCode == 'a'|| keyCode == 'A') { keys[IZQUIERDA] = true; }
 		//Si guardamos estado del juego.
-		if(keyCode == 'g'|| keyCode=='G'){ keys[5] = true; }
+		if(keyCode == 'g'|| keyCode=='G'){ keys[GUARDAR] = true; }
 		//Si cargamos estado del juego.
-		if(keyCode == 'c'|| keyCode=='C'){ keys[6] = true; }
+		if(keyCode == 'c'|| keyCode=='C'){ keys[CARGAR] = true; }
 		//Si disparamos (SpaceBar)
-		if(keyCode == 32){ keys[7] = true; }
+		if(keyCode == 32){ keys[SPACEPAR] = true; }
 	}
 	public void keyReleased(){
 		//Se deshabilita la key
-	    if (keyCode == 'w'|| keyCode == 'W') { keys[0] = false; }
-	    if (keyCode == 's'|| keyCode == 'S') { keys[1] = false; }
-		if (keyCode == 'd'|| keyCode == 'D') { keys[2] = false; }
-	    if (keyCode == 'a'|| keyCode == 'A') { keys[3] = false; }
-	    if (keyCode == 'g'|| keyCode == 'G') { keys[5] = false; }
-	    if (keyCode == 'c'|| keyCode == 'C') { keys[6] = false; }
-		if(keyCode == 32) { keys[7] = false; }
+	    if (keyCode == 'w'|| keyCode == 'W') { keys[ARRIBA] = false; }
+	    if (keyCode == 's'|| keyCode == 'S') { keys[ABAJO] = false; }
+		if (keyCode == 'd'|| keyCode == 'D') { keys[DERECHA] = false; }
+	    if (keyCode == 'a'|| keyCode == 'A') { keys[IZQUIERDA] = false; }
+	    if (keyCode == 'g'|| keyCode == 'G') { keys[GUARDAR] = false; }
+	    if (keyCode == 'c'|| keyCode == 'C') { keys[CARGAR] = false; }
+		if(keyCode == 32) { keys[SPACEPAR] = false; }
 
 	}
 	public void keyVerificar(){//Funcion para reconocimiento de tecla pulsada
-		if (keys[7]) {
-			plataforma.getNave().disparar(0, 0);//Se dispara
-			keys[7] = false;
+		//Se dispara
+		if (keys[SPACEPAR]) {
+			plataSPACEPARorma.getNave().disparar(0, 0);
+			keys[SPACEPAR] = false;
 		}
-		if (keys[0]) {
-	    	plataforma.getNave().movimiento(1, this);//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
-	    }
-		if (keys[1]) {
-			plataforma.getNave().movimiento(2, this);//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
-		}
-		if (keys[2]) {
-	    	plataforma.getNave().movimiento(3,this);//Se envia un 3 que seria igual a Derecha y la pantalla para sus parametros(Alto, ancho)
-	    }
-	    if (keys[3]) {
-	    	plataforma.getNave().movimiento(4,this);//Se envia un 4 que seria igual a Izquierda y la pantalla para sus parametros(Alto, ancho)
-		 } 
-	    if(keys[4]){//Se envian las coordenadas del mouse
-			plataforma.getNave().disparar(mouseX, mouseY);
-	    }
-	    if(keys[5]){//Guardar
+		//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
+		if (keys[ARRIBA]) { plataforma.getNave().movimiento(ARRIBA, this); }
+		//Se envia un 1 que seria igual a Abajo y la pantalla para sus parametros(Alto, ancho)
+		if (keys[ABAJO]) { plataforma.getNave().movimiento(ABAJO, this); }
+		//Se envia un 3 que seria igual a Derecha y la pantalla para sus parametros(Alto, ancho)
+		if (keys[DERECHA]) { plataforma.getNave().movimiento(DERECHA,this); }
+	    //Se envia un 4 que seria igual a Izquierda y la pantalla para sus parametros(Alto, ancho)
+		if (keys[IZQUIERDA]) { plataforma.getNave().movimiento(IZQUIERDA,this); } 
+	    //Se envian las coordenadas del mouse
+		 if(keys[MOUSE]){ plataforma.getNave().disparar(mouseX, mouseY); }
+		//Guardar
+	    if(keys[GUARDAR]){
 	    	String nombre;
 		    nombre = JOptionPane.showInputDialog("INPUT YOUR NAME...");
 		    if(nombre == null){
-		    	keys[5]=false;
+		    	keys[GUARDAR]=false;
 		    	return;
-		    	}//si tocamos cancelar salddriamos de la funcion
+		    	}//si tocamos cancelar saldriamos de la funcion
 	    	plataforma.setName(nombre);
 	    	
 	    	try {
@@ -156,15 +161,15 @@ public class Screen extends PApplet{
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-	    	keys[5]=false;
+	    	keys[GUARDAR]=false;
 	    }
-	    if(keys[6]){//Cargar
+	    if(keys[CARGAR]){//Cargar
 	    	int PlatformLvl=0,lvl;//Este en realidad es el Id de nuestra plataforma con el que vamos a llamar al resto de los objetos de nuestra plataforma.
 	    	String Name, Lvl;
 		    Name= JOptionPane.showInputDialog("INPUT YOUR NAME...");
 		    Lvl = JOptionPane.showInputDialog("INTUP YOUR LEVEL...");
 		    if(Lvl==null||Name==null){
-		    	keys[6]=false;
+		    	keys[CARGAR]=false;
 		    	return;
 		    }//si tocamos cancelar salddriamos de la funcion
 		    lvl = Integer.parseInt(Lvl);//No le llega la variable bien!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -214,7 +219,7 @@ public class Screen extends PApplet{
 			} catch (ClassNotFoundException | SQLException e) {
 				e.printStackTrace();
 			}
-	    	keys[6]=false;
+	    	keys[CARGAR]=false;
 	    }
 	}	
 	

@@ -70,7 +70,7 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 
 		double velX, velY;
 		switch(opc){
-			case 1:
+			case 0:
 				velX = Math.cos(this.angle) * 5;
 				velY = Math.sin(this.angle) * 5;
 				if (xInScreen && yInScreen){
@@ -83,7 +83,7 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 				if (Ycentro-(this.alto/2) == 0 && velY > 0) Ycentro += velY;// Bottom-side case.
 				if (Ycentro+(this.alto/2) == screen.height && velY < 0) Ycentro += velY; //Top-side case.
 				break;
-			case 2:
+			case 1:
 				//Adapt case 1 logic for reverse movement.
 				if(xInScreen && yInScreen) {
 					velX = Math.cos(this.angle) * 3;
@@ -92,10 +92,10 @@ public class Ship extends Triangle implements Movible,Disparador,Dibujable {
 					Ycentro -= velY;
 				}
 				break;
-			case 3:
+			case 2:
 				this.angle+=Math.PI/30;
 				break;
-			case 4:
+			case 3:
 				this.angle-=Math.PI/30;
 				break;
 		}
