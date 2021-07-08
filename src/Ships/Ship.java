@@ -6,6 +6,7 @@ import Game.Drawable;
 import Game.Shooter;
 import Game.Movable;
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PImage;
 
 public class Ship extends Triangle implements Movable, Shooter, Drawable {
@@ -32,9 +33,23 @@ public class Ship extends Triangle implements Movable, Shooter, Drawable {
 
 	public void draw(PApplet screen)
 	{
+		//Triangle drawing.
 		screen.fill(0,255,0);//relleno
 		screen.triangle(this.x1,this.y1,this.x2,this.y2,this.x3,this.y3);//nave
 		screen.color(1);
+
+		//Codigo sacado de internet QUITAR
+		//Rotating image drawing.
+		screen.pushMatrix();
+		screen.imageMode(PConstants.CENTER);
+		//screen.translate(this.height/2, this.height/2, 0);
+		// Este rotate es para render P3D
+		//screen.rotate((float) this.angle, this.xCenter, this.yCenter, 0);
+		//screen.rotate(screen.random(0,  6.28f));
+		screen.rotate((float) this.angle);
+		//screen.getMatrix().rotate((float)this.angle);
+		screen.image(img, this.xCenter, this.yCenter, this.height/2, this.height);
+		screen.popMatrix();
 		Iterator<Laser> iterator = this.lasers.iterator();
 		while (iterator.hasNext())
 		{
@@ -99,7 +114,6 @@ public class Ship extends Triangle implements Movable, Shooter, Drawable {
 				break;
 		}
 	}
-	//No implementada.
 	public void followMouse(PApplet screen){//RotarTriangulo según posición del mouse.
 		/*float x_mouse = screen.mouseX;//posici�n X del mouse	
 		float y_mouse = screen.mouseY;//posici�n Y del mouse.*/
