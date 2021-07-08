@@ -73,7 +73,7 @@ public class Data {
 		String query = "SELECT * FROM smallasteroid  WHERE Platform_NroLvl = "+numeroNivel+"" ;//consulta
 		ResultSet rs = stmt.executeQuery(query) ;//Ejecucion
 	
-		while (rs.next())//mientras que haya una siguiente devolución
+		while (rs.next())//mientras que haya una siguiente devoluciï¿½n
 		{
 			SmallAsteroid ast = new SmallAsteroid(rs.getFloat("X"),rs.getFloat("Y"),rs.getInt("radio"),rs.getFloat("Xspeed"),rs.getFloat("Yspeed"));
 			ast.setImg(screen.loadImage("ast.png"));
@@ -234,10 +234,10 @@ public class Data {
 			query5 = "INSERT INTO item (`X`, `Y`, `Accion`, `Bonus`, `Platform_NroLvl`) VALUES ("+X+", "+Y+", "+Accion+", "+Bonus+", "+DBlvl+")" ;
 			stmt.executeUpdate(query5) ;
 		}
-		float Xnave = Nave.getXcentro();
-		float Ynave = Nave.getYcentro();
+		float Xnave = Nave.getXcenter();
+		float Ynave = Nave.getYcenter();
 		int Life = Nave.getLife();
-		int Alto = Nave.getAlto();
+		int Alto = Nave.getHeight();
 		query6 = "INSERT INTO ship (`Xcenter`, `Ycenter`, `Lifes`, `Platform_NroLvl`, `Alto`) VALUES ("+Xnave+", "+Ynave+","+Life+", "+DBlvl+", "+Alto+")" ;
 		stmt.executeUpdate(query6) ;
 

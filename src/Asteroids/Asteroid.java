@@ -1,9 +1,9 @@
 package Asteroids;
 import processing.core.PImage;
-import Game.Dibujable;
+import Game.Drawable;
 
 
-public abstract class Asteroid extends Circle implements Dibujable {
+public abstract class Asteroid extends Circle implements Drawable {
 	protected float Xspeed,Yspeed;//Velocidad
 	protected PImage img;
 	

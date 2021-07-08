@@ -3,12 +3,12 @@ package Enemies;
 import java.util.Vector;
 
 import processing.core.PImage;
-import Game.Dibujable;
-import Game.Disparador;
-import Game.Movible;
+import Game.Drawable;
+import Game.Shooter;
+import Game.Movable;
 import Ships.Laser;
 
-public abstract class Enemy extends Square implements Dibujable, Movible, Disparador {
+public abstract class Enemy extends Square implements Drawable, Movable, Shooter {
 	protected float Xspeed, Yspeed;//Coordenadas de velocidad
 	protected Vector<Laser> balas = new Vector<Laser>();//municiones de los enemigos.
 	protected PImage img;//Variable donde se guarda la ruta de una imagen

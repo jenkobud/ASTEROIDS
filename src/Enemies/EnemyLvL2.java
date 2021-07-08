@@ -3,12 +3,12 @@ package Enemies;
 import java.util.Iterator;
 
 import processing.core.PApplet;
-import Game.Dibujable;
-import Game.Disparador;
-import Game.Movible;
+import Game.Drawable;
+import Game.Shooter;
+import Game.Movable;
 import Ships.Laser;
 
-public class EnemyLvL2 extends Enemy implements Dibujable, Movible, Disparador{
+public class EnemyLvL2 extends Enemy implements Drawable, Movable, Shooter {
 	private int limBalas;
 	private int timer = 50;
 	
@@ -17,7 +17,7 @@ public class EnemyLvL2 extends Enemy implements Dibujable, Movible, Disparador{
 		limBalas=32;
 	}
 
-	public void disparar(double Xdisparo,double Ydisparo)
+	public void shoot(double Xdisparo, double Ydisparo)
 	{
 		if(this.limBalas >0){
 			if(timer==0){
@@ -72,7 +72,7 @@ public class EnemyLvL2 extends Enemy implements Dibujable, Movible, Disparador{
 
 	}
 
-	public void movimiento(int opc, PApplet screen) {
+	public void movement(int opc, PApplet screen) {
 		this.setX(this.getX()+Xspeed);//se mueve en base a Xspeed y Yspeed
 		this.setY(this.getY()+Yspeed);
 		if(this.getX()+this.lado+10>=screen.width){//Si choca contra la pared invierte su sentido
@@ -89,13 +89,13 @@ public class EnemyLvL2 extends Enemy implements Dibujable, Movible, Disparador{
 		}
 	}
 
-	public void dibujar(PApplet pantalla) {
+	public void draw(PApplet pantalla) {
 		pantalla.image(img, this.getX(), this.getY(),this.getLado()+10,this.getLado());//Enemigo, creamos una imagen con la direccion de nuestra img original
 		Iterator<Laser> iterador = this.balas.iterator();
 		while (iterador.hasNext())
 		{
 			Laser actual = iterador.next();
-			actual.dibujar(pantalla);
+			actual.draw(pantalla);
 			if (actual.getX()>pantalla.width || actual.getY()>pantalla.height)
 			{
 				iterador.remove();

@@ -1,30 +1,28 @@
 package Ships;
 
 public abstract class Triangle {
-	protected int Xcentro,Ycentro,alto;	
-	protected Triangle(int xcentro, int ycentro, int alto) {
+	protected int xCenter, yCenter, height;
+	protected Triangle(int xCenter, int yCenter, int height) {
 		super();
-		Xcentro = xcentro;
-		Ycentro = ycentro;
-		this.alto = alto;
+		this.xCenter = xCenter;
+		this.yCenter = yCenter;
+		this.height = height;
 	}
 
-	public int getXcentro() {
-		return Xcentro;
+	public int getXcenter() {
+		return xCenter;
 	}
-	public void setXcentro(int xcentro) {
-		Xcentro = xcentro;
+	public void setXcenter(int xcenter) {
+		this.xCenter = xcenter;
 	}
-	public int getYcentro() {
-		return Ycentro;
+	public int getYcenter() {
+		return yCenter;
 	}
-	public void setYcentro(int ycentro) {
-		Ycentro = ycentro;
+	public void setYcenter(int ycenter) {
+		this.yCenter = ycenter;
 	}
-	public int getAlto() {
-		return alto;
-	}
-	public void setAlto(int alto) {
-		this.alto = alto;
+	public int getHeight() { return height; }
+	public void setHeight(int height) {
+		this.height = height;
 	}
 }

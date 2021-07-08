@@ -1,9 +1,9 @@
 package Ships;
 import Enemies.Enemy;
-import Game.Dibujable;
+import Game.Drawable;
 import processing.core.*;
 
-public class Laser implements Dibujable {
+public class Laser implements Drawable {
 	private boolean flag;//La utilizamos para saber si las balas son del enemigo o de la nave
 	protected float X,Y;//Coordenadas
 	protected double Xdestiny, Ydestiny;//Direccion del laser apuntado por Mouse
@@ -24,7 +24,7 @@ public class Laser implements Dibujable {
 		this.flag=false;
 	}
 	
-	public void dibujar(PApplet pantalla)
+	public void draw(PApplet pantalla)
 	{
 		if(this.flag==true){//si las balas son de la nave
 			pantalla.fill(0,255,0);

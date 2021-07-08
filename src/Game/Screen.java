@@ -11,11 +11,11 @@ import processing.core.PApplet;
 import processing.core.PImage;
 
 public class Screen extends PApplet{
-	PImage Fondo,pausa;//Imagen de Fondo
-	Platform plataforma;
+	PImage background, pause;//Imagen de Fondo
+	Platform platform1;
 	boolean[] keys = new boolean[8];//vector de booleans utilizado para mejorar la jugabilidad cuando se presionan las teclas o el mouse
 	//0=W; 1=s; 2=d; 3=a; 4=mouse; 5=G(guardar); 6=C(Cargar); 7=SpaceBar(shoot)
-	Integer ARRIBA = 0; 
+	Integer ARRIBA = 0;
 	Integer ABAJO = 1;
 	Integer DERECHA = 2;
 	Integer IZQUIERDA = 3;
@@ -23,7 +23,7 @@ public class Screen extends PApplet{
 	Integer GUARDAR = 5;
 	Integer CARGAR = 6;
 	Integer SPACEPAR = 7;
-	int cont,contDeItems,puntajeAnt,lvl;
+	int count, itemsCounter, scoreBefore, lvl;
 	Boolean isPaused;
 	
 	public void settings() {
@@ -32,64 +32,59 @@ public class Screen extends PApplet{
 
 	public void setup() {
 		isPaused = false;
-		pausa = loadImage("pause.png");
-		Fondo = loadImage("FondoDeJuego.jpg");//Cargamos la IMG de fondo
-		background(Fondo);//se la asignamos al fondo
+		pause = loadImage("pause.png");
+		background = loadImage("FondoDeJuego.jpg");//Cargamos la IMG de fondo
+		background(background);//se la asignamos al fondo
 		background(0, 50);
-		plataforma = new Platform("Juego",1,this);//creamos la plataforma
-		cont=0;
-		contDeItems=0;
-		lvl=0;
-		
+		platform1 = new Platform("Juego",1,this);//creamos la plataforma
+		count = 0;
+		itemsCounter = 0;
+		lvl= 0;
 	}
 	
 	public void draw() {
 		noCursor();
-		background(Fondo);
+		background(background);
 		if(!isPaused){
-			keyVerificar();//funcion para mejorar el uso de teclas
-			plataforma.getNave().dibujar(this);//mostramos la nave
-			plataforma.colisiones(this);
-			plataforma.getNave().seguirMouse(this);
-			if(cont==300){//Muestro los items cada cierto tiempo.
-				if(contDeItems<plataforma.getItems().size()){//Muestro los items cada cierto tiempo.
-					plataforma.getItems().elementAt(contDeItems).dibujar(this);
-					contDeItems++;//Pasamos al siguiente item
-					cont=0;//contador que se reinicia cuando muestro un item
-				}
+			keyVerification();//funcion para mejorar el uso de teclas
+			platform1.getShip().draw(this);//mostramos la nave
+			platform1.collisions(this);
+			platform1.getShip().followMouse(this);
+			if((count == 300) && (itemsCounter < platform1.getItems().size())){//Muestro los items cada cierto tiempo.
+				platform1.getItems().elementAt(itemsCounter).draw(this);
+				itemsCounter++;//Pasamos al siguiente item
+				count = 0;//contador que se reinicia cuando muestro un item
 			}
-			plataforma.mostradorDeItems(contDeItems,this);
-			cont++;//contador que cuenta el tiempo para mostrar un  items
-			for(SmallAsteroid Actual : plataforma.getAsteroidesChicos()){//dibuja Asteroides chicos
-				Actual.dibujar(this);
-				Actual.movimiento(0, this);
+			platform1.mostradorDeItems(itemsCounter,this);
+			count++;//contador que cuenta el tiempo para mostrar un  items
+			for(SmallAsteroid Actual : platform1.getSmallAsteroids()){//dibuja Asteroides chicos
+				Actual.draw(this);
+				Actual.movement(0, this);
 			}
-			for(BigAsteroid Actual : plataforma.getAsteroidesGrandes()){//dibuja Asteroides grandes
-				Actual.dibujar(this);
-				Actual.movimiento(0, this);
+			for(BigAsteroid Actual : platform1.getBigAsteroids()){//dibuja Asteroides grandes
+				Actual.draw(this);
+				Actual.movement(0, this);
 			}
-			for(Enemy Actual : plataforma.getEnemigos()){//dibuja enemigos
-				Actual.dibujar(this);
-				Actual.disparar(Actual.getXspeed(),3);
-				Actual.movimiento(0, this);
+			for(Enemy Actual : platform1.getEnemies()){//dibuja enemigos
+				Actual.draw(this);
+				Actual.shoot(Actual.getXspeed(),3);
+				Actual.movement(0, this);
 			}
-			if(plataforma.winLose(this)==true){//Si ganamos y quedan m�s niveles
-				puntajeAnt = plataforma.getPuntaje();//Guardamos el puntaje anterior para pode seguir con el mismo en el proximo lvl
-				plataforma = new Platform(plataforma.getName(),plataforma.getLevel().getLvL()+1 , this);//subimos unon la dificultad dell nivel.a
-				plataforma.setPuntaje(puntajeAnt);//Se lo asignamos par seguir con el juego
+			if(platform1.winLose(this)){//Si ganamos y quedan m�s niveles
+				scoreBefore = platform1.getPuntaje();//Guardamos el puntaje anterior para pode seguir con el mismo en el proximo lvl
+				platform1 = new Platform(platform1.getName(), platform1.getLevel().getLvL()+1 , this);//subimos unon la dificultad dell nivel.a
+				platform1.setPuntaje(scoreBefore);//Se lo asignamos par seguir con el juego
 				
 				//Reiniciamos ambos al subir de nivel para poder empezar todo de nuevo
-				cont=0;
-				contDeItems=0;
+				count = 0;
+				itemsCounter = 0;
 			}
-		}
-		if(isPaused){
+		}else{
     		imageMode(CENTER);
-			image(pausa,(float) (this.width/2),this.height/2,pausa.width*2,pausa.height*2);
+			image(pause, (float) (this.width)/2,(float)(this.height)/2, pause.width*2, pause.height*2);
 			//textSize(200);
 			//fill(255);
 			//this.text("PAUSA", width/2-300, height/2+80);
-			
 		}
 	}
 
@@ -127,40 +122,38 @@ public class Screen extends PApplet{
 		if(keyCode == 32) { keys[SPACEPAR] = false; }
 
 	}
-	public void keyVerificar(){//Funcion para reconocimiento de tecla pulsada
+	public void keyVerification(){//Funcion para reconocimiento de tecla pulsada
 		//Se dispara
 		if (keys[SPACEPAR]) {
-			plataSPACEPARorma.getNave().disparar(0, 0);
+			platform1.getShip().shoot(0, 0);
+			//Necesario para que se dispare de una bala a la vez.
 			keys[SPACEPAR] = false;
 		}
 		//Se envia un 1 que seria igual a Arriba y la pantalla para sus parametros(Alto, ancho)
-		if (keys[ARRIBA]) { plataforma.getNave().movimiento(ARRIBA, this); }
+		if (keys[ARRIBA]) { platform1.getShip().movement(ARRIBA, this); }
 		//Se envia un 1 que seria igual a Abajo y la pantalla para sus parametros(Alto, ancho)
-		if (keys[ABAJO]) { plataforma.getNave().movimiento(ABAJO, this); }
+		if (keys[ABAJO]) { platform1.getShip().movement(ABAJO, this); }
 		//Se envia un 3 que seria igual a Derecha y la pantalla para sus parametros(Alto, ancho)
-		if (keys[DERECHA]) { plataforma.getNave().movimiento(DERECHA,this); }
+		if (keys[DERECHA]) { platform1.getShip().movement(DERECHA,this); }
 	    //Se envia un 4 que seria igual a Izquierda y la pantalla para sus parametros(Alto, ancho)
-		if (keys[IZQUIERDA]) { plataforma.getNave().movimiento(IZQUIERDA,this); } 
+		if (keys[IZQUIERDA]) { platform1.getShip().movement(IZQUIERDA,this); }
 	    //Se envian las coordenadas del mouse
-		 if(keys[MOUSE]){ plataforma.getNave().disparar(mouseX, mouseY); }
+		 if(keys[MOUSE]){ platform1.getShip().shoot(mouseX, mouseY); }
 		//Guardar
 	    if(keys[GUARDAR]){
-	    	String nombre;
-		    nombre = JOptionPane.showInputDialog("INPUT YOUR NAME...");
-		    if(nombre == null){
+	    	String name;
+		    name = JOptionPane.showInputDialog("INPUT YOUR NAME...");
+		    if(name == null){
 		    	keys[GUARDAR]=false;
 		    	return;
 		    	}//si tocamos cancelar saldriamos de la funcion
-	    	plataforma.setName(nombre);
+	    	platform1.setName(name);
 	    	
 	    	try {
-				Data.SavePlatform(plataforma, plataforma.getItems().size()-this.contDeItems, this.contDeItems);
-	    		Data.Save(plataforma.getAsteroidesChicos(), plataforma.getAsteroidesGrandes(), plataforma.getEnemigos(), plataforma.getNave(), plataforma, plataforma.getItems());
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+				Data.SavePlatform(platform1, platform1.getItems().size()-this.itemsCounter, this.itemsCounter);
+	    		Data.Save(platform1.getSmallAsteroids(), platform1.getBigAsteroids(), platform1.getEnemies(), platform1.getShip(), platform1, platform1.getItems());
+			} catch (ClassNotFoundException e) { e.printStackTrace(); }
+	    	  catch (SQLException e) { e.printStackTrace(); }
 	    	keys[GUARDAR]=false;
 	    }
 	    if(keys[CARGAR]){//Cargar
@@ -176,49 +169,38 @@ public class Screen extends PApplet{
 			
 	    	try {
 				PlatformLvl =Data.getNroPlataforma(Name,lvl);//pedimos el id de la plataforma
-			} catch (ClassNotFoundException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			} catch (SQLException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			}
+			} catch (ClassNotFoundException e2) { e2.printStackTrace(); }
+	    	  catch (SQLException e2) { e2.printStackTrace(); }
+
 	    	try {
-				plataforma = Data.getPlataforma(Name,lvl, this);//pedimos y asignamos nuestra plataforma guardada
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
+				platform1 = Data.getPlataforma(Name,lvl, this);//pedimos y asignamos nuestra plataforma guardada
+			} catch (ClassNotFoundException | SQLException e) { e.printStackTrace(); }
+
 	    	try {
-				plataforma.setNave(Data.getNave(PlatformLvl));//pedimos y asignamos la nave
-			} catch (ClassNotFoundException | SQLException e1) {
-				e1.printStackTrace();
-			}
+				platform1.setShip(Data.getNave(PlatformLvl));//pedimos y asignamos la nave
+			} catch (ClassNotFoundException | SQLException e1) { e1.printStackTrace(); }
+
 	    	try {
-				this.contDeItems=Data.getcontItems(PlatformLvl);
-				this.cont=0;
-			} catch (ClassNotFoundException | SQLException e1) {
-				e1.printStackTrace();
-			}
+				this.itemsCounter =Data.getcontItems(PlatformLvl);
+				this.count =0;
+			} catch (ClassNotFoundException | SQLException e1) { e1.printStackTrace(); }
+
 	    	try {
-				plataforma.setAsteroidesChicos(Data.getSmallAstLvl(PlatformLvl,this));//pedimos y asignamos el vector de SmallAst
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
+				platform1.setSmallAsteroids(Data.getSmallAstLvl(PlatformLvl,this));//pedimos y asignamos el vector de SmallAst
+			} catch (ClassNotFoundException | SQLException e) { e.printStackTrace(); }
+
 	    	try {
-				plataforma.setAsteroidesGrandes(Data.getBigAstLvl(PlatformLvl,this));//pedimos y asignamos el vector de BigAst
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
+				platform1.setBigAsteroids(Data.getBigAstLvl(PlatformLvl,this));//pedimos y asignamos el vector de BigAst
+			} catch (ClassNotFoundException | SQLException e) { e.printStackTrace(); }
+
 	    	try {
-				plataforma.setEnemigos(Data.getEnemyLvl(PlatformLvl,this));//pedimos y asignamos el vector de enemigos
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
+				platform1.setEnemies(Data.getEnemyLvl(PlatformLvl,this));//pedimos y asignamos el vector de enemigos
+			} catch (ClassNotFoundException | SQLException e) { e.printStackTrace(); }
+
 	    	try {
-				plataforma.setItems(Data.getItemsLvl(PlatformLvl,this));//pedimos y asignamos el vector de items
-			} catch (ClassNotFoundException | SQLException e) {
-				e.printStackTrace();
-			}
+				platform1.setItems(Data.getItemsLvl(PlatformLvl,this));//pedimos y asignamos el vector de items
+			} catch (ClassNotFoundException | SQLException e) { e.printStackTrace(); }
+
 	    	keys[CARGAR]=false;
 	    }
 	}	

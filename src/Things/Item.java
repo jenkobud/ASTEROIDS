@@ -3,9 +3,9 @@ package Things;
 import processing.core.PApplet;
 import processing.core.PImage;
 import Enemies.Square;
-import Game.Dibujable;
+import Game.Drawable;
 
-public class Item extends Square  implements Dibujable{
+public class Item extends Square  implements Drawable {
 	protected int Bonus;//cantidad de bonificacion del item
 	protected boolean Accion;
 	private PImage img;
@@ -20,7 +20,7 @@ public class Item extends Square  implements Dibujable{
 		Accion = accion;
 	}
 	
-	public void dibujar(PApplet pantalla) {
+	public void draw(PApplet pantalla) {
 		if(this.Accion==true){
 			pantalla.image(img,this.x,this.y,this.lado,this.lado);
 		}else{
